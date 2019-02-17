@@ -1,0 +1,183 @@
+[
+    {
+        "id": "1c98465c.af7e4a",
+        "type": "tab",
+        "label": "Hue Config",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8bda73fb.f4863",
+        "type": "api-call-service",
+        "z": "1c98465c.af7e4a",
+        "name": "Kitchen Lights On",
+        "server": "7c1fd0bf.92ab7",
+        "service_domain": "light",
+        "service": "turn_on",
+        "data": "{\"entity_id\":\"light.kitchen\",\"brightness_pct\":100}",
+        "render_data": false,
+        "mergecontext": "",
+        "output_location": "payload",
+        "output_location_type": "msg",
+        "x": 510,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "47352ad3.9300e4",
+        "type": "hue-motion",
+        "z": "1c98465c.af7e4a",
+        "name": "Kitchen sensor",
+        "bridge": "9eafcf62.c5ab6",
+        "sensorid": "9",
+        "x": 720,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4a68ac7d.d58364",
+        "type": "server-state-changed",
+        "z": "1c98465c.af7e4a",
+        "name": "Kitchen Sensor",
+        "server": "7c1fd0bf.92ab7",
+        "entityidfilter": "input_boolean.kitchen_sensor",
+        "entityidfiltertype": "substring",
+        "outputinitially": false,
+        "state_type": "str",
+        "haltifstate": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "outputs": 1,
+        "x": 120,
+        "y": 180,
+        "wires": [
+            [
+                "f2a55751.d66ed8"
+            ]
+        ]
+    },
+    {
+        "id": "f2a55751.d66ed8",
+        "type": "switch",
+        "z": "1c98465c.af7e4a",
+        "name": "on/off",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 290,
+        "y": 180,
+        "wires": [
+            [
+                "45c2261e.acba88"
+            ],
+            [
+                "8bda73fb.f4863",
+                "b3bbdf05.f9e68"
+            ]
+        ]
+    },
+    {
+        "id": "b3bbdf05.f9e68",
+        "type": "change",
+        "z": "1c98465c.af7e4a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 240,
+        "wires": [
+            [
+                "47352ad3.9300e4"
+            ]
+        ]
+    },
+    {
+        "id": "f42d38cf.e6a8c8",
+        "type": "hue-motion",
+        "z": "1c98465c.af7e4a",
+        "name": "Kitchen sensor",
+        "bridge": "9eafcf62.c5ab6",
+        "sensorid": "9",
+        "x": 720,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "45c2261e.acba88",
+        "type": "change",
+        "z": "1c98465c.af7e4a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "true",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 120,
+        "wires": [
+            [
+                "f42d38cf.e6a8c8"
+            ]
+        ]
+    },
+    {
+        "id": "7c1fd0bf.92ab7",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "legacy": false,
+        "hassio": false,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open"
+    },
+    {
+        "id": "9eafcf62.c5ab6",
+        "type": "hue-bridge",
+        "z": "",
+        "name": "BRIDGE_NAME",
+        "bridge": "HUE_IPV4",
+        "key": "API_KEY",
+        "interval": "3000"
+    }
+]
